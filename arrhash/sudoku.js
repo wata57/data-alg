@@ -1,30 +1,54 @@
-let arr = ["neet", "code", "love", "you"];
+let board = [
+  ["1", "2", ".", ".", "3", ".", ".", ".", "."],
+  ["4", ".", ".", "5", ".", ".", ".", ".", "."],
+  [".", "9", "8", ".", ".", ".", ".", ".", "3"],
+  ["5", ".", ".", ".", "6", ".", ".", ".", "4"],
+  [".", ".", ".", "8", ".", "3", ".", ".", "5"],
+  ["7", ".", ".", ".", "2", ".", ".", ".", "6"],
+  [".", ".", ".", ".", ".", ".", "2", ".", "."],
+  [".", ".", ".", "4", "1", "9", ".", ".", "8"],
+  [".", ".", ".", ".", "8", ".", ".", "7", "9"],
+];
 
-function encode(arr) {
-  let res = "";
-  for (let word of arr) {
-    res += word.length.toString() + "#" + word;
-  }
-  return res;
-}
-
-function decode(s) {
-  let res = [];
-  let i = 0;
-  while (i < s.length) {
-    let j = i;
-    while (s[j] !== "#") {
-      j += 1;
+function isValidRowsColumns(board) {
+  const hm_columns = Array.from({ length: 9 }, () => []);
+  for (let row of board) {
+    const row_items = [];
+    for (let i = 0; i < row.length; i++) {
+      if (row[i] == ".") {
+        continue;
+      }
+      if (row_items.includes(row[i])) {
+        return false;
+      }
+      row_items.push(row[i]);
+      if (hm_columns[i].includes(row[i])) {
+        return false;
+      }
+      hm_columns[i].push(row[i]);
     }
-    const length = parseInt(s.slice(i, j));
-    res.push(s.slice(j + 1, j + 1 + length));
-    i = j + 1 + length;
   }
-  return res;
+  return true;
 }
 
-const arr_encoded = encode(arr);
-const result = decode(arr_encoded);
+function isValidSquare(board) {
+  const hm_squares = Array.from({ length: 9 }, () => []);
+  for (let i = 0; i < board.length; i++) {
+    for (let j = 0; j < board[i].length; j++) {
+      const squareIndex = Math.floor(i / 3) * 3 + Math.floor(j / 3);
+      if (board[i][j] == ".") {
+        continue;
+      }
+      if (hm_squares[squareIndex].includes(board[i][j])) {
+        return false;
+      }
+      hm_squares[squareIndex].push(board[i][j]);
+    }
+  }
+  return true;
+}
+
+const result = isValidRowsColumns(board) && isValidSquare(board);
 console.log(result);
 
 document.getElementById("result").textContent = "Resultado: " + result;
