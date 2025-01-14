@@ -1,25 +1,28 @@
-let nums = [64, 34, 25, 12, 22, 11, 90];
+let nums = [9, 1, 4, 7, 3, -1, 0, 5, 8, -1, 6];
 
-function bubbleSort(nums) {
-  let n = nums.length;
-  let swapped = true;
+function longestseq(nums) {
+  const firsts_array = [];
+  const nums_set = new Set(nums);
 
-  while (n > 1 && swapped) {
-    swapped = false;
-    let i = 0;
-    while (i + 1 < n) {
-      if (nums[i] > nums[i + 1]) {
-        [nums[i], nums[i + 1]] = [nums[i + 1], nums[i]];
-        swapped = true;
-      }
+  for (let n of nums) {
+    if (!nums_set.has(n - 1)) {
+      firsts_array.push(n);
+    }
+  }
+  let max_length = 0;
+  for (let first of firsts_array) {
+    let c = 1;
+    let i = 1;
+    while (nums_set.has(first + i)) {
+      c++;
       i++;
     }
-    n--;
+    max_length = Math.max(max_length, c);
   }
-  return nums;
+  return max_length;
 }
 
-const result = bubbleSort(nums);
+const result = longestseq(nums);
+console.log(result);
 
-document.getElementById("result").textContent =
-  "Sorted array: " + result.join(", ");
+document.getElementById("result").textContent = "Longest seq: " + result;
